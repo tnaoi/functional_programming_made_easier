@@ -1,17 +1,4 @@
 module Ch5
-  ( (#)
-  , apply
-  , applyFlipped
-  , const
-  , flip
-  , head
-  , length
-  , null
-  , singleton
-  , snoc
-  , tail
-  , test
-  )
   where
 
 import Data.List (List(..), (:))
@@ -75,6 +62,13 @@ last :: ∀ a. List a -> Maybe a
 last Nil    = Nothing
 last (_ : xs) = if length xs == 1 then head xs else last xs
 
+init :: ∀ a. List a -> Maybe (List a)
+init Nil  = Nothing
+init l    = Just $ go l where
+  go Nil       = Nil
+  go (_ : Nil) = Nil
+  go (x : xs)  = x : go xs
+
 infixr 0 apply as $
 infixl 1 applyFlipped as #
 
@@ -91,5 +85,11 @@ test = do
   -- log $ show $ head ("abc" : "123" : Nil)
   -- log $ show $ tail (Nil :: List Unit)
   -- log $ show $ tail ("abc" : "123" : Nil)
+
   log $ show $ (last Nil :: Maybe Unit)
   log $ show $ last ("a" : "b" : "c" : Nil)
+
+  log $ show $ init (Nil :: List Unit)
+  log $ show $ init (1 : Nil)
+  log $ show $ init (1 : 2 : Nil)
+  log $ show $ init (1 : 2 : 3 : Nil)
