@@ -69,6 +69,10 @@ init l    = Just $ go l where
   go (_ : Nil) = Nil
   go (x : xs)  = x : go xs
 
+uncons :: ∀ a. List a -> Maybe { head :: a, tail :: List a}
+uncons Nil = Nothing
+uncons (x : xs) = Just { head: x, tail : xs}
+
 infixr 0 apply as $
 infixl 1 applyFlipped as #
 
@@ -93,3 +97,5 @@ test = do
   log $ show $ init (1 : Nil)
   log $ show $ init (1 : 2 : Nil)
   log $ show $ init (1 : 2 : 3 : Nil)
+
+  log $ show $ uncons (1 : 2 : 3 : Nil)
