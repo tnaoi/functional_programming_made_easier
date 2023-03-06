@@ -76,6 +76,7 @@ uncons (x : xs) = Just { head: x, tail : xs}
 infixr 0 apply as $
 infixl 1 applyFlipped as #
 
+
 test :: Effect Unit
 test = do
   -- log $ show $ flip const 1 2
