@@ -1,6 +1,7 @@
 module Ch9 where
 
 import Data.Generic.Rep (class Generic)
+import Data.Maybe (Maybe(..))
 import Data.Show.Generic (genericShow)
 import Effect (Effect)
 import Effect.Console (log)
@@ -89,6 +90,36 @@ instance groupMod4 :: Group Mod4 where
   ginverse Two = One
   ginverse Three = One
 
+-----------------------
+-- Semigroup and Monoid for Maybe
+-----------------------
+newtype First a = First (Maybe a)
+newtype Last a = Last (Maybe a)
+
+derive instance genericFirst :: Generic (First a) _
+derive instance genericLast :: Generic (Last a) _
+
+instance showFirst :: Show a => Show (First a) where
+  show = genericShow
+
+instance showLast :: Show a => Show (Last a) where
+  show = genericShow
+
+instance semigroupFirst :: Semigroup (First a) where
+  append (First Nothing) last = last
+  append first _ = first
+
+instance monoidFirst :: Monoid (First a) where
+  mempty = First Nothing
+
+instance semigroupLast :: Semigroup (Last a) where
+  append first (Last Nothing) = first
+  append _ last = last
+
+instance monoidLast :: Monoid (Last a) where
+  mempty = Last Nothing
+
+
 ------------------
 -- Tests
 ------------------
@@ -127,3 +158,21 @@ verifyMod4Semigroup :: Effect Unit
 verifyMod4Semigroup = do
   log "Verify Mod4 Semigroup Laws (1 test)"
   log $ show $ (One <> Two) <> Three == One <> (Two <> Three)
+
+verifyMod4Monoid :: Effect Unit
+verifyMod4Monoid = do
+  log "Verify Mod4 Monoid Laws (1 test)"
+  log $ show $ mempty <> One == One <> mempty && One <> mempty == One
+
+verifyMod4Group :: Effect Unit
+verifyMod4Group = do
+  log "Verify Mod4 Group Laws (2 test)"
+  log $ show $ ginverse One == Three
+  log $ show $ ginverse Three == One
+  log $ show $ ginverse Zero == One
+
+verifyMaybeSemigroup :: Effect Unit
+verifyMaybeSemigroup = do
+  log "Verifying Maybe Semigroup (1 test)"
+  log $ show $ First Nothing <> First (Just 77)
+

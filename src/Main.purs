@@ -10,3 +10,5 @@ main = do
   Ch9.verifyOrBoolSemigroup
   Ch9.verifyOrBoolMonoid
   Ch9.verifyMod4Semigroup
+  Ch9.verifyMod4Group
+  Ch9.verifyMaybeSemigroup
