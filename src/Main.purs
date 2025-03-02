@@ -2,9 +2,11 @@ module Main where
 
 import Prelude
 
+import Ch9 as Ch9
 import Effect (Effect)
 
-import Ch5 as Ch5
-
 main :: Effect Unit
-main = Ch5.test
+main = do
+  Ch9.verifyOrBoolSemigroup
+  Ch9.verifyOrBoolMonoid
+  Ch9.verifyMod4Semigroup
